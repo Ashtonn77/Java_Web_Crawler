@@ -5,35 +5,25 @@ import java.util.List;
 
 public class Main {
 
-    public static void main(String[] args) {
-        List<WebCrawler> bots = new ArrayList<>
-        (
-                List.of
-                (
+    public static void main(String[] args) throws InterruptedException {
 
-                        new WebCrawler("https://www.nytimes.com/", 1),
-                        new WebCrawler("https://en.wikipedia.org/wiki/Main_Page", 2),
-                        new WebCrawler("https://www.ft.com/", 3)
+        List<WebCrawler> bots = new ArrayList<>();    
+   
+        bots.add(new WebCrawler("https://www.nytimes.com/", 1));
+        bots.add(new WebCrawler("https://www.ft.com/", 2));
+        bots.add(new WebCrawler("https://www.imdb.com/", 3));
 
-
-                )
-
-        );
-
-        
         for(WebCrawler bot : bots){
             
-            try {
-                
+            try {                
                 bot.getThread().join();
-                
-            }catch(InterruptedException e){
-                
+            }catch (InterruptedException e){
                 System.out.println(e.getClass().getSimpleName());
-                
             }
+           
             
         }
+    
         
     }
     

@@ -11,23 +11,27 @@ import java.util.List;
 
 public class WebCrawler implements Runnable {
 
-    private static final int MAX_DEPTH = 3;
+    private final int MAX_DEPTH = 3;
+    private final List<String> visited;
+    private final int _id;
     private final String firstLink;
-    private List<String> visited;
-    private final int ID;
     private final Thread thread;
 
     public WebCrawler(String link, int id) {
 
         visited = new ArrayList<>();
-        System.out.println("Web crawler initialized ...");
-
+        _id = id;
         firstLink = link;
-        ID = id;
         thread = new Thread(this);
 
-        thread.start();
+        thread.start();       
+     
+        System.out.println("Web crawler: " + id + " -> initialized ...");
+    }
 
+    @Override
+    public void run() {
+        crawl(1, firstLink);
     }
 
     private void crawl(int level, String url) {
@@ -35,12 +39,12 @@ public class WebCrawler implements Runnable {
         if (level <= MAX_DEPTH) {
 
             Document document = request(url);
-
             if (document != null) {
 
                 for (Element link : document.select("a[href]")) {
 
                     String nextLink = link.absUrl("href");
+
                     if (!visited.contains(nextLink)) {
                         crawl(level++, nextLink);
                     }
@@ -49,8 +53,8 @@ public class WebCrawler implements Runnable {
 
             }
 
-        }
 
+        }
 
     }
 
@@ -63,10 +67,12 @@ public class WebCrawler implements Runnable {
 
             if (connection.response().statusCode() == 200) {
 
-                System.out.println("\nBot id: " + ID + " --> Received webpage at " + url);
+                System.out.println("\nBot id: " + _id);
+                System.out.println("Inside webpage: " + url);
 
                 String title = document.title();
-                System.out.println("Title: " + title);                
+                System.out.println("Title: " + title);
+
                 visited.add(title);
 
                 return document;
@@ -76,19 +82,13 @@ public class WebCrawler implements Runnable {
             return null;
 
         } catch (IOException e) {
+            System.out.println(e.getClass().getSimpleName());
             return null;
         }
 
     }
 
-    @Override
-    public void run() {
-        crawl(1, firstLink);
-    }
-    
-    public Thread getThread(){
+    public Thread getThread() {
         return thread;
     }
-    
-    
 }
