@@ -9,33 +9,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WebCrawler implements Runnable {
+public class WebCrawler {
 
-    private final int MAX_DEPTH = 3;
     private final List<String> visited;
     private final int _id;
-    private final String firstLink;
-    private final Thread thread;
-
-    public WebCrawler(String link, int id) {
+   
+    public WebCrawler(int id) {
 
         visited = new ArrayList<>();
         _id = id;
-        firstLink = link;
-        thread = new Thread(this);
-
-        thread.start();       
-     
+        System.out.println();
         System.out.println("Web crawler: " + id + " -> initialized ...");
+        
     }
 
-    @Override
-    public void run() {
-        crawl(1, firstLink);
-    }
+    public void crawl(int level, String url) {
 
-    private void crawl(int level, String url) {
-
+        int MAX_DEPTH = 3;
         if (level <= MAX_DEPTH) {
 
             Document document = request(url);
@@ -88,7 +78,4 @@ public class WebCrawler implements Runnable {
 
     }
 
-    public Thread getThread() {
-        return thread;
-    }
 }
