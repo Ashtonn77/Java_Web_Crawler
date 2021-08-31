@@ -1,5 +1,4 @@
 # Web Crawler
-<br/>
 
 Scrape multiple webpages simultaneously. Enter the number of crawlers you want to initialize and the pages you want to crawl, <br/> 
 the program does the rest. The application is completely decoupled and easy to maintain.
